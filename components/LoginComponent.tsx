@@ -10,29 +10,32 @@ import {
   Platform,
   Alert 
 } from 'react-native';
+import { LoginData, loginUser } from '../api/auth.api';
+
+
 
 interface LoginComponentProps {
   logoImage: any;
-  onLogin: (username: string, password: string) => void;
+  onLogin: (email: string, password: string) => void;
 }
 
 const LoginComponent: React.FC<LoginComponentProps> = ({ logoImage, onLogin }) => {
-  const [username, setUsername] = useState('');
+  const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({
-    username: '',
+    email: '',
     password: ''
   });
 
   const validateFields = () => {
     let valid = true;
     const newErrors = {
-      username: '',
+      email: '',
       password: ''
     };
 
-    if (!username.trim()) {
-      newErrors.username = 'El usuario es requerido';
+    if (!email.trim()) {
+      newErrors.email = 'El usuario es requerido';
       valid = false;
     }
 
@@ -45,9 +48,21 @@ const LoginComponent: React.FC<LoginComponentProps> = ({ logoImage, onLogin }) =
     return valid;
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (validateFields()) {
-      onLogin(username, password);
+      try {
+        const loginData:LoginData = {
+          email,
+          password
+        };
+
+        const userData = await loginUser(loginData);
+
+      } catch (error) {
+        
+      }
+
+      onLogin(email, password);
     }
   };
 
@@ -66,17 +81,17 @@ const LoginComponent: React.FC<LoginComponentProps> = ({ logoImage, onLogin }) =
 
         {/* Campo de usuario */}
         <TextInput
-          style={[styles.input, errors.username ? styles.inputError : null]}
-          placeholder="Username"
+          style={[styles.input, errors.email ? styles.inputError : null]}
+          placeholder="email"
           placeholderTextColor="#999"
-          value={username}
+          value={email}
           onChangeText={(text) => {
-            setUsername(text);
-            setErrors({...errors, username: ''});
+            setemail(text);
+            setErrors({...errors, email: ''});
           }}
           autoCapitalize="none"
         />
-        {errors.username ? <Text style={styles.errorText}>{errors.username}</Text> : null}
+        {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
 
         {/* Campo de contraseña */}
         <TextInput
