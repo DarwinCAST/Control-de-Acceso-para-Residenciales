@@ -1,7 +1,7 @@
 import axios from "axios";
 import { RegistryData, VisitData, VisitResponse } from "../types/visit.types";
 
-const API_URL = "http://api.asolutions.digital/api";
+const API_URL = "https://api.asolutions.digital/api";
 
 export const getVisitsByResidentId = async (
   id: string
